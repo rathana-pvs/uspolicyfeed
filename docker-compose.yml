@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: uspolicyfeed_pass_123
       POSTGRES_DB: uspolicyfeed
     ports:
-      - '5436:5432'
+      - '127.0.0.1:5436:5432'
     volumes:
       - uspolicyfeed_db_data:/var/lib/postgresql/data
 
