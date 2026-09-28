@@ -218,8 +218,8 @@ export function InfiniteArticleScroll({ initialArticle, initialRelated }: Infini
                     {article.content ? (
                       <RichText
                         content={article.content}
-                        adWidgetId="2076626"
-                        secondAdWidgetId="2076626"
+                        adWidgetId={process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_IN_ARTICLE_1 || '2088215'}
+                        secondAdWidgetId={process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_IN_ARTICLE_2 || ''}
                       />
                     ) : (
                       <p className="text-xl leading-relaxed mt-4 italic opacity-50">
@@ -228,8 +228,8 @@ export function InfiniteArticleScroll({ initialArticle, initialRelated }: Infini
                     )}
                   </div>
 
-                  {/* Under-article Native Recommendations Widget (ID: 2076625 - Desktop Only) */}
-                  <AdskeeperWidget widgetId="2076625" onlyShowOn="desktop" className="hidden lg:block my-4" />
+                  {/* Under-article Native Recommendations Widget (ID: 2088213 - Desktop Only) */}
+                  <AdskeeperWidget widgetId={process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_FEED || '2088213'} onlyShowOn="desktop" className="hidden lg:block my-4" />
 
                   {/* Related Articles — inside main column so sidebar stays visible */}
                   {index === 0 && initialRelated && initialRelated.length > 0 && (
@@ -253,7 +253,7 @@ export function InfiniteArticleScroll({ initialArticle, initialRelated }: Infini
                   <aside className="lg:col-span-4">
                     <div className="sticky top-24">
                       <AdskeeperWidget
-                        widgetId="2076627"
+                        widgetId={process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_SIDEBAR || '2088217'}
                         adType="sidebar"
                         onlyShowOn="desktop"
                       />
@@ -273,7 +273,7 @@ export function InfiniteArticleScroll({ initialArticle, initialRelated }: Infini
       {/* Feed Widget — rendered ONCE at the very bottom, outside the article loop */}
       {!hasMore && (
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
-          <AdskeeperWidget widgetId="2076625" />
+          <AdskeeperWidget widgetId={process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_FEED || '2088213'} />
         </div>
       )}
     </div>

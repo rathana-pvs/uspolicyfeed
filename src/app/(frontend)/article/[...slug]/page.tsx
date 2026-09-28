@@ -101,11 +101,11 @@ export default async function ArticlePage({ params }: PageProps) {
   const authorInitial = (article.author?.name || 'B').charAt(0).toUpperCase()
   const formattedDate = article.publishedAt ? formatDate(article.publishedAt, 'd MMMM yyyy') : 'Recent'
 
-  const widgetSidebar = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_SIDEBAR || '2076627'
-  const widgetInArticle1 = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_IN_ARTICLE_1 || '2076626'
+  const widgetSidebar = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_SIDEBAR || '2088217'
+  const widgetInArticle1 = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_IN_ARTICLE_1 || '2088215'
   const widgetInArticle2 = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_IN_ARTICLE_2 || ''
   const widgetUnderArticle = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_UNDER_ARTICLE || ''
-  const widgetFeed = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_FEED || '2076625'
+  const widgetFeed = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_FEED || '2088213'
 
   const jsonLd = {
     '@context': 'https://schema.org',

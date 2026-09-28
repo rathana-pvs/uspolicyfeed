@@ -168,7 +168,7 @@ export default function AdskeeperWidget({ widgetId, className = '', adType, only
       )
     }
 
-    if (widgetId === '2043077') {
+    if (widgetId === '2088215' || widgetId === '2076626' || widgetId === '2043077') {
       // In-Article Top: 2-column compact list (replicates ArticleCard size="sm")
       return (
         <div className={`ads-container border border-dashed border-[var(--border)] bg-[var(--bg-card)] rounded-md p-6 my-8 ${className}`}>

@@ -9,15 +9,17 @@ export function VisitorCounter() {
   useEffect(() => {
     if (typeof window === 'undefined') return
 
+    const wauKey = process.env.NEXT_PUBLIC_WAU_KEY || '4e9mbhwyhk'
+
     // 1. Setup global queue
     window._wau = window._wau || []
-    window._wau.push(['dynamic', '4e9mbhwyhk', 'xyn', 'c4302bffffff', 'small'])
+    window._wau.push(['dynamic', wauKey, 'xyn', 'c4302bffffff', 'small'])
 
     // 2. Ensure config script exists with exact ID required by whos.amung.us
     if (!document.getElementById('_wauxyn')) {
       const configScript = document.createElement('script')
       configScript.id = '_wauxyn'
-      configScript.innerHTML = 'var _wau = _wau || []; _wau.push(["dynamic", "4e9mbhwyhk", "xyn", "c4302bffffff", "small"]);'
+      configScript.innerHTML = `var _wau = _wau || []; _wau.push(["dynamic", "${wauKey}", "xyn", "c4302bffffff", "small"]);`
       document.body.appendChild(configScript)
     }
 
@@ -42,7 +44,7 @@ export function VisitorCounter() {
       const pingScript = document.createElement('script')
       pingScript.id = `_wau_ping_${Date.now()}`
       pingScript.async = true
-      pingScript.src = `https://whos.amung.us/pingjs/?k=4e9mbhwyhk&t=${pageTitle}&c=d&x=${pageUrl}&y=${referrer}&a=-1&v=27&r=${randomId}`
+      pingScript.src = `https://whos.amung.us/pingjs/?k=${wauKey}&t=${pageTitle}&c=d&x=${pageUrl}&y=${referrer}&a=-1&v=27&r=${randomId}`
       document.head.appendChild(pingScript)
     }, 250)
 

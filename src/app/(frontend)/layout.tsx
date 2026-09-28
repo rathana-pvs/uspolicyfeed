@@ -63,10 +63,10 @@ export default async function FrontendLayout({
   return (
     <html lang="en" className={ibmPlexMono.variable}>
       <head>
-        {/* Ads script disabled until real Adskeeper ID is configured */}
-        {process.env.NEXT_PUBLIC_ADS_ENABLED === 'true' && process.env.NEXT_PUBLIC_ADS_KEEPER_SITE_ID && (
+        {/* Adskeeper site loader script */}
+        {process.env.NEXT_PUBLIC_ADS_ENABLED === 'true' && (
           <script
-            src={`https://jsc.adskeeper.com/site/${process.env.NEXT_PUBLIC_ADS_KEEPER_SITE_ID}.js`}
+            src={`https://jsc.adskeeper.com/site/${process.env.NEXT_PUBLIC_ADS_KEEPER_SITE_ID || '1113195'}.js`}
             async
           />
         )}
