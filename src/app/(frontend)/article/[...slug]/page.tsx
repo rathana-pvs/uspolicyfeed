@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const articleSlug = Array.isArray(rawSlug) ? rawSlug[rawSlug.length - 1] : rawSlug
 
   const article = await getArticle(articleSlug)
-  if (!article) return { title: 'Story Not Found — US Policy Feed' }
+  if (!article) return { title: 'Story Not Found' }
 
   const envUrl = process.env.NEXT_PUBLIC_SITE_URL
   const siteUrl = envUrl && !envUrl.includes('placeholder.com') ? envUrl : 'https://uspolicyfeed.com'
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const ogImageUrl = getMediaUrl(article.coverImage)
 
   return {
-    title: `${title} — ${siteName}`,
+    title,
     description,
     alternates: {
       canonical: `/article/${articleSlug}`,

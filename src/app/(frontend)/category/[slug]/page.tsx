@@ -27,9 +27,8 @@ const categoryDescriptions: Record<string, string> = {
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const { slug } = await params
   const categoryName = slug.charAt(0).toUpperCase() + slug.slice(1)
-  const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'US Policy Feed'
   return {
-    title: `${categoryName} — ${siteName}`,
+    title: categoryName,
     description: categoryDescriptions[slug.toLowerCase()] || `The latest ${categoryName} policy, analysis, and reporting.`,
   }
 }

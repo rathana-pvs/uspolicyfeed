@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — US Policy Feed',
+  title: 'Privacy Policy',
   description: 'Learn how US Policy Feed collects, protects, and manages reader data and analytics in accordance with global privacy standards.',
 }
 

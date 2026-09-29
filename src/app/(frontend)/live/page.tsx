@@ -6,7 +6,7 @@ import { getArticles } from '@/lib/api-server'
 import { Article } from '@/types'
 
 export const metadata: Metadata = {
-  title: 'Live Coverage — US Policy Feed',
+  title: 'Live Coverage',
   description: 'Follow breaking news and live coverage in real time from US Policy Feed.',
 }
 

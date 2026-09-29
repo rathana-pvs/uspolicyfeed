@@ -3,7 +3,7 @@ import Link from 'next/link'
 import ContactForm from '@/components/contact/ContactForm'
 
 export const metadata: Metadata = {
-  title: 'Contact Us — US Policy Feed',
+  title: 'Contact Us',
   description: 'Reach our newsroom, investigative reporters, editors, or secure tip desk. Contact US Policy Feed.',
 }
 
