@@ -9,7 +9,7 @@ export function VisitorCounter() {
   useEffect(() => {
     if (typeof window === 'undefined') return
 
-    const wauKey = process.env.NEXT_PUBLIC_WAU_KEY || '4e9mbhwyhk'
+    const wauKey = process.env.NEXT_PUBLIC_WAU_KEY || 'cv8yp1ovlc'
 
     // 1. Setup global queue
     window._wau = window._wau || []
