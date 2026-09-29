@@ -17,6 +17,8 @@ echo "🔨 Building production Next.js app..."
 NODE_OPTIONS="--max-old-space-size=1536" npm run build
 cp -rn public .next/standalone/ 2>/dev/null || true
 cp -rn .next/static .next/standalone/.next/ 2>/dev/null || true
+mkdir -p /var/www/uspolicyfeed/public/media 2>/dev/null || true
+ln -sfn /var/www/uspolicyfeed/public/media /var/www/media 2>/dev/null || true
 
 # 3. Reload PM2 process
 echo "♻️  Reloading PM2 process..."

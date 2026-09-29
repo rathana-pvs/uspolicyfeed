@@ -1067,6 +1067,7 @@ export async function POST(req: NextRequest) {
               }
             })
             result.coverImage = mediaDoc.id
+            result.coverImageUrl = mediaDoc.url || `/api/media/file/${filename}`
           } else {
             throw new Error(`Failed to fetch cover image: Status ${imageRes.status}`)
           }
@@ -1088,6 +1089,7 @@ export async function POST(req: NextRequest) {
               },
             })
             result.coverImage = mediaDoc.id
+            result.coverImageUrl = mediaDoc.url || result.scrapedImageUrl
           } catch (extErr) {
             console.error('Failed to create external cover image fallback:', extErr)
           }

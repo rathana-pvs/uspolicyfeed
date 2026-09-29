@@ -16,6 +16,7 @@ interface AIResult {
   metaTitle?: string
   metaDescription?: string
   coverImage?: number | string
+  coverImageUrl?: string
   scrapedImageUrl?: string
 }
 
@@ -569,7 +570,7 @@ export const AIAssistant: React.FC = () => {
                     value={`Image imported to media library. ID: ${result.coverImage}`} 
                     applied={!!applied['coverImage']} 
                     onApply={() => applyField('coverImage', result.coverImage)} 
-                    imageUrl={result.scrapedImageUrl}
+                    imageUrl={result.coverImageUrl || result.scrapedImageUrl}
                   />
                 )}
                 {result.excerpt && (

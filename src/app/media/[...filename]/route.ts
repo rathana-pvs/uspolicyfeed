@@ -27,7 +27,7 @@ export async function GET(
 
   const rawFilename = filename.join('/')
   const baseDir = path.resolve(process.cwd(), 'public/media')
-  const filePath = path.resolve(baseDir, rawFilename)
+  let filePath = path.resolve(baseDir, rawFilename)
 
   // Security check: prevent directory traversal
   if (!filePath.startsWith(baseDir)) {
@@ -35,7 +35,20 @@ export async function GET(
   }
 
   if (!fs.existsSync(filePath)) {
-    return new NextResponse('File Not Found', { status: 404 })
+    // Fallback: if a resized thumbnail was requested (e.g. name-400x267.jpg) but not generated,
+    // check if the original file (name.jpg) exists and serve it instead
+    const resizedMatch = rawFilename.match(/^(.*)-\d+x\d+(\.[a-zA-Z0-9]+)$/)
+    if (resizedMatch) {
+      const originalFilename = `${resizedMatch[1]}${resizedMatch[2]}`
+      const originalFilePath = path.resolve(baseDir, originalFilename)
+      if (originalFilePath.startsWith(baseDir) && fs.existsSync(originalFilePath)) {
+        filePath = originalFilePath
+      } else {
+        return new NextResponse('File Not Found', { status: 404 })
+      }
+    } else {
+      return new NextResponse('File Not Found', { status: 404 })
+    }
   }
 
   try {
@@ -73,10 +86,25 @@ export async function HEAD(
 
   const rawFilename = filename.join('/')
   const baseDir = path.resolve(process.cwd(), 'public/media')
-  const filePath = path.resolve(baseDir, rawFilename)
+  let filePath = path.resolve(baseDir, rawFilename)
 
-  if (!filePath.startsWith(baseDir) || !fs.existsSync(filePath)) {
-    return new NextResponse(null, { status: 404 })
+  if (!filePath.startsWith(baseDir)) {
+    return new NextResponse(null, { status: 403 })
+  }
+
+  if (!fs.existsSync(filePath)) {
+    const resizedMatch = rawFilename.match(/^(.*)-\d+x\d+(\.[a-zA-Z0-9]+)$/)
+    if (resizedMatch) {
+      const originalFilename = `${resizedMatch[1]}${resizedMatch[2]}`
+      const originalFilePath = path.resolve(baseDir, originalFilename)
+      if (originalFilePath.startsWith(baseDir) && fs.existsSync(originalFilePath)) {
+        filePath = originalFilePath
+      } else {
+        return new NextResponse(null, { status: 404 })
+      }
+    } else {
+      return new NextResponse(null, { status: 404 })
+    }
   }
 
   const stats = fs.statSync(filePath)

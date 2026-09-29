@@ -59,7 +59,8 @@ export function getMediaUrl(media?: any, fallback: string = 'https://picsum.phot
   const url = typeof media === 'string' ? media : (media.externalUrl || media.url)
   if (!url) return fallback
   if (url.startsWith('http://') || url.startsWith('https://')) return url
-  if (url.startsWith('/api/media/file/')) return `/media/${url.replace('/api/media/file/', '')}`
+  if (url.startsWith('/media/')) return `/api/media/file/${url.replace('/media/', '')}`
+  if (url.startsWith('/api/media/file/')) return url
   return url.startsWith('/') ? url : `/${url}`
 }
 

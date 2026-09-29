@@ -13,10 +13,10 @@ function normalizeImageUrl(url: string | undefined | null): string | undefined {
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url
   }
-  if (url.startsWith('/api/media/file/')) {
-    return `/media/${url.replace('/api/media/file/', '')}`
-  }
   if (url.startsWith('/media/')) {
+    return `/api/media/file/${url.replace('/media/', '')}`
+  }
+  if (url.startsWith('/api/media/file/')) {
     return url
   }
   return url.startsWith('/') ? url : `/${url}`
