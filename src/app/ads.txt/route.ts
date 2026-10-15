@@ -1,10 +1,7 @@
 import { NextResponse } from 'next/server'
 
-export async function GET() {
-  const pubId = process.env.NEXT_PUBLIC_ADSENSE_PUB_ID || 'pub-2441454515104767'
-  const content = `mgid.com, 994959, DIRECT, d4c29acad76ce94f
-google.com, ${pubId}, RESELLER, f08c47fec0942fa0
-google.com, ${pubId}, DIRECT, f08c47fec0942fa0
+const ADS_TXT_CONTENT = `google.com, pub-2441454515104767, RESELLER, f08c47fec0942fa0
+google.com, pub-2441454515104767, DIRECT, f08c47fec0942fa0
 rubiconproject.com, 9655, RESELLER, 0bfd66d529a55807
 appnexus.com, 15825, RESELLER, f5ab79cb980f11d1
 smartadserver.com, 4577, RESELLER, 060d053dcf45cbf3
@@ -20,9 +17,12 @@ amxrtb.com, 105199704, DIRECT
 sharethrough.com, a6a34444, RESELLER, d53b998a7bd4ecd2
 onetag.com, 7cd9d7c7c13ff36, RESELLER
 inmobi.com, c2391dc8a51e420480044992fe6dc4d7, RESELLER, 83e75a7ae333ca9d
+mgid.com, 994959, DIRECT, d4c29acad76ce94f
 gamoshi.io, 267-b6491, DIRECT, 20e30b2ae1f670f2
 `
-  return new NextResponse(content, {
+
+export async function GET() {
+  return new NextResponse(ADS_TXT_CONTENT, {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
       'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400',

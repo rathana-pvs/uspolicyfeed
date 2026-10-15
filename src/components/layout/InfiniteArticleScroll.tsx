@@ -18,6 +18,11 @@ interface InfiniteArticleScrollProps {
 
 // Show only the opened article, then hand off to Adskeeper Feed (Option A)
 const MAX_ARTICLES = 1
+const widgetSidebar = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_SIDEBAR || ''
+const widgetInArticle1 = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_IN_ARTICLE_1 || ''
+const widgetInArticle2 = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_IN_ARTICLE_2 || ''
+const widgetUnderArticle = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_UNDER_ARTICLE || ''
+const widgetFeed = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_FEED || ''
 
 export function InfiniteArticleScroll({ initialArticle, initialRelated }: InfiniteArticleScrollProps) {
   const [articles, setArticles] = useState<Article[]>([initialArticle])
@@ -218,8 +223,8 @@ export function InfiniteArticleScroll({ initialArticle, initialRelated }: Infini
                     {article.content ? (
                       <RichText
                         content={article.content}
-                        adWidgetId={process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_IN_ARTICLE_1 || '2088215'}
-                        secondAdWidgetId={process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_IN_ARTICLE_2 || ''}
+                        adWidgetId={widgetInArticle1}
+                        secondAdWidgetId={widgetInArticle2}
                       />
                     ) : (
                       <p className="text-xl leading-relaxed mt-4 italic opacity-50">
@@ -228,8 +233,9 @@ export function InfiniteArticleScroll({ initialArticle, initialRelated }: Infini
                     )}
                   </div>
 
-                  {/* Under-article Native Recommendations Widget (ID: 2088213 - Desktop Only) */}
-                  <AdskeeperWidget widgetId={process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_FEED || '2088213'} onlyShowOn="desktop" className="hidden lg:block my-4" />
+                  {widgetUnderArticle && (
+                    <AdskeeperWidget widgetId={widgetUnderArticle} onlyShowOn="desktop" className="hidden lg:block my-4" />
+                  )}
 
                   {/* Related Articles — inside main column so sidebar stays visible */}
                   {index === 0 && initialRelated && initialRelated.length > 0 && (
@@ -249,11 +255,11 @@ export function InfiniteArticleScroll({ initialArticle, initialRelated }: Infini
                   )}
                 </div>
 
-                {isDesktop === true && (
+                {isDesktop === true && widgetSidebar && (
                   <aside className="lg:col-span-4">
                     <div className="sticky top-24">
                       <AdskeeperWidget
-                        widgetId={process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_SIDEBAR || '2088217'}
+                        widgetId={widgetSidebar}
                         adType="sidebar"
                         onlyShowOn="desktop"
                       />
@@ -271,9 +277,9 @@ export function InfiniteArticleScroll({ initialArticle, initialRelated }: Infini
       <div ref={observerTargetRef} />
 
       {/* Feed Widget — rendered ONCE at the very bottom, outside the article loop */}
-      {!hasMore && (
+      {!hasMore && widgetFeed && (
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
-          <AdskeeperWidget widgetId={process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_FEED || '2088213'} />
+          <AdskeeperWidget widgetId={widgetFeed} />
         </div>
       )}
     </div>

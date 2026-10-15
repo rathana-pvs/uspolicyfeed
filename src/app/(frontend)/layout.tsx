@@ -21,6 +21,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 const envUrl = process.env.NEXT_PUBLIC_SITE_URL
 const siteUrl = envUrl && !envUrl.includes('placeholder.com') ? envUrl : 'https://uspolicyfeed.com'
 const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'US Policy Feed'
+const adskeeperSiteId = process.env.NEXT_PUBLIC_ADS_KEEPER_SITE_ID
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -63,11 +64,10 @@ export default async function FrontendLayout({
   return (
     <html lang="en" className={ibmPlexMono.variable}>
       <head>
-        {/* Adskeeper site loader script */}
-        {process.env.NEXT_PUBLIC_ADS_ENABLED === 'true' && (
+        {process.env.NODE_ENV === 'production' && adskeeperSiteId && (
           <script
-            src={`https://jsc.adskeeper.com/site/${process.env.NEXT_PUBLIC_ADS_KEEPER_SITE_ID || '1113195'}.js`}
             async
+            src={`https://jsc.adskeeper.com/site/${adskeeperSiteId}.js`}
           />
         )}
       </head>

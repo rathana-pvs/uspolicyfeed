@@ -101,11 +101,10 @@ export default async function ArticlePage({ params }: PageProps) {
   const authorInitial = (article.author?.name || 'B').charAt(0).toUpperCase()
   const formattedDate = article.publishedAt ? formatDate(article.publishedAt, 'd MMMM yyyy') : 'Recent'
 
-  const widgetSidebar = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_SIDEBAR || '2088217'
-  const widgetInArticle1 = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_IN_ARTICLE_1 || '2088215'
+  const widgetSidebar = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_SIDEBAR || ''
+  const widgetInArticle1 = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_IN_ARTICLE_1 || ''
   const widgetInArticle2 = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_IN_ARTICLE_2 || ''
-  const widgetUnderArticle = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_UNDER_ARTICLE || ''
-  const widgetFeed = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_FEED || '2088213'
+  const widgetFeed = process.env.NEXT_PUBLIC_ADS_KEEPER_WIDGET_FEED || ''
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -204,7 +203,7 @@ export default async function ArticlePage({ params }: PageProps) {
             {/* Bottom Feed Native Ad Widget — inside article content column, no border */}
             {widgetFeed && (
               <div className="article-bottom-feed-wrapper mt-6 mb-8">
-                <AdskeeperWidget widgetId={widgetFeed} />
+                <AdskeeperWidget widgetId={widgetFeed} adType="feed" />
               </div>
             )}
           </div>
