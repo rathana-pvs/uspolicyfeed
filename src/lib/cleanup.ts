@@ -2,8 +2,11 @@ import { getPayload } from 'payload'
 import config from '../../payload.config'
 import fs from 'fs'
 import path from 'path'
+import { getMediaDirectory } from './media-dir'
+import { assertWipeAllowed } from './wipe-guard'
 
 const cleanup = async () => {
+  assertWipeAllowed('npm run clean')
   console.log('🧹 Starting thorough data cleanup...')
   const payload = await getPayload({ config })
   
@@ -41,7 +44,7 @@ const cleanup = async () => {
   }
 
   // Clean local files in public/media
-  const mediaDir = path.resolve(process.cwd(), 'public/media')
+  const mediaDir = getMediaDirectory()
   if (fs.existsSync(mediaDir)) {
     const files = fs.readdirSync(mediaDir)
     console.log(`📁 Cleaning ${files.length} local files in public/media...`)

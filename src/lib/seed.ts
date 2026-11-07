@@ -2,8 +2,11 @@ import { getPayload } from 'payload'
 import config from '../../payload.config'
 import fs from 'fs'
 import path from 'path'
+import { getMediaDirectory } from './media-dir'
+import { assertWipeAllowed } from './wipe-guard'
 
 const seed = async () => {
+  assertWipeAllowed('npm run seed')
   console.log('🚀 Starting US Policy Feed Database Seed...')
   const payload = await getPayload({ config })
 
@@ -98,7 +101,7 @@ const seed = async () => {
 
   // 5. Seed Media and Articles
   console.log(`\n📰 Seeding ${articles.length} Articles with Media Assets...`)
-  const mediaDir = path.resolve(process.cwd(), 'public/media')
+  const mediaDir = getMediaDirectory()
   let successCount = 0
 
   for (let i = 0; i < articles.length; i++) {

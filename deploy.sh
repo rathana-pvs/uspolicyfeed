@@ -24,6 +24,9 @@ cp -a --update=none "$MEDIA_DIR"/. "$MEDIA_MIRROR"/ 2>/dev/null || true
 MEDIA_COUNT_BEFORE=$(ls -A "$MEDIA_DIR" | wc -l)
 if [ -L .next/standalone/public/media ]; then rm .next/standalone/public/media; fi
 
+# Fail fast if the code would save uploads anywhere inside .next/ (wiped on build)
+npx tsx scripts/check-media-dir.ts > /dev/null || { echo -e "${RED}❌ media-dir check failed — not deploying. Run: npm run check:media${NC}"; exit 1; }
+
 # 2. Build production Next.js app
 echo "🔨 Building production Next.js app..."
 NODE_OPTIONS="--max-old-space-size=1536" npm run build
@@ -51,6 +54,19 @@ ln -sfn /var/www/uspolicyfeed/public/media /var/www/media 2>/dev/null || true
 # 3. Reload PM2 process
 echo "♻️  Reloading PM2 process..."
 pm2 reload uspolicyfeed
+
+# 4a. Media check: the restarted app must serve an existing upload from $MEDIA_DIR
+sleep 3
+SAMPLE=$(ls -t "$MEDIA_DIR" | head -1)
+if [ -n "$SAMPLE" ]; then
+  CODE=$(curl -s -o /dev/null -w "%{http_code}" -H "Host: uspolicyfeed.com" "http://localhost:3002/api/media/file/$SAMPLE")
+  if [ "$CODE" = "200" ]; then
+    echo -e "${GREEN}✓ Media served from $MEDIA_DIR ($SAMPLE)${NC}"
+  else
+    echo -e "${RED}❌ Media check failed: /api/media/file/$SAMPLE returned $CODE. Check uploads before using the admin.${NC}"
+    exit 1
+  fi
+fi
 
 # 4. Health Check
 echo "🔥 Checking application health..."
