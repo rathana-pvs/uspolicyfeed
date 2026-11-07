@@ -2,7 +2,17 @@ import type { CollectionConfig } from 'payload'
 import path from 'path'
 import fs from 'fs'
 
-const mediaDir = path.resolve(process.cwd(), 'public/media')
+// In production PM2 runs .next/standalone/server.js, which chdir()s into the build
+// folder. Resolving from process.cwd() would put uploads inside .next/standalone,
+// which every `next build` wipes. Always resolve to the project's public/media.
+const getMediaDirectory = () => {
+  if (process.env.PAYLOAD_MEDIA_DIR) return path.resolve(process.env.PAYLOAD_MEDIA_DIR)
+  const cwd = process.cwd()
+  if (cwd.includes(`${path.sep}.next`)) return path.resolve(cwd.split(`${path.sep}.next`)[0], 'public/media')
+  return path.resolve(cwd, 'public/media')
+}
+
+const mediaDir = getMediaDirectory()
 try {
   if (!fs.existsSync(mediaDir)) {
     fs.mkdirSync(mediaDir, { recursive: true })

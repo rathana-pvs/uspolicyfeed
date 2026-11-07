@@ -2,6 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 
+// In production PM2 runs .next/standalone/server.js, which chdir()s into the build
+// folder. Resolving from process.cwd() would put uploads inside .next/standalone,
+// which every `next build` wipes. Always resolve to the project's public/media.
+const getMediaDirectory = () => {
+  if (process.env.PAYLOAD_MEDIA_DIR) return path.resolve(process.env.PAYLOAD_MEDIA_DIR)
+  const cwd = process.cwd()
+  if (cwd.includes(`${path.sep}.next`)) return path.resolve(cwd.split(`${path.sep}.next`)[0], 'public/media')
+  return path.resolve(cwd, 'public/media')
+}
+
 const MIME_MAP: Record<string, string> = {
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
@@ -26,7 +36,7 @@ export async function GET(
   }
 
   const rawFilename = filename.join('/')
-  const baseDir = path.resolve(process.cwd(), 'public/media')
+  const baseDir = getMediaDirectory()
   let filePath = path.resolve(baseDir, rawFilename)
 
   // Security check: prevent directory traversal
@@ -85,7 +95,7 @@ export async function HEAD(
   }
 
   const rawFilename = filename.join('/')
-  const baseDir = path.resolve(process.cwd(), 'public/media')
+  const baseDir = getMediaDirectory()
   let filePath = path.resolve(baseDir, rawFilename)
 
   if (!filePath.startsWith(baseDir)) {
