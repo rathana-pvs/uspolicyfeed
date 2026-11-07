@@ -3,6 +3,11 @@ import { withPayload } from '@payloadcms/next/withPayload'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
+  // The media route reads files from a dynamic path, which can make the build trace
+  // the whole project (including public/media and .next/standalone) into the output.
+  outputFileTracingExcludes: {
+    '*': ['./public/**', './.next/standalone/**', './scripts/**', './*.md', './*.sh', './seed_data_40.json'],
+  },
   images: {
     remotePatterns: [
       {
