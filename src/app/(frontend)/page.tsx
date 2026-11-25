@@ -38,6 +38,20 @@ function FeatureCard({ story }: { story: Article }) {
   )
 }
 
+function toRegionalCard(a: Article): Article {
+  return {
+    id: a.id,
+    slug: a.slug,
+    title: a.title,
+    region: a.region,
+    readTime: a.readTime,
+    category: a.category ? ({ name: a.category.name } as Article['category']) : undefined,
+    coverImage: a.coverImage
+      ? ({ url: a.coverImage.url, externalUrl: a.coverImage.externalUrl, alt: a.coverImage.alt } as Article['coverImage'])
+      : a.coverImage,
+  } as Article
+}
+
 export default async function HomePage() {
   const [{ hero: dbHero, secondary: dbSecondary }, allArticlesRes, videoArticles] = await Promise.all([
     getFeatured(),
@@ -82,7 +96,9 @@ export default async function HomePage() {
         )}
 
         {/* Regional News Beat Explorer */}
-        <RegionalNews articles={articles} />
+        {/* RegionalNews is a client component: everything passed to it is serialized
+            into the page, so send only the fields it renders. */}
+        <RegionalNews articles={articles.map(toRegionalCard)} />
       </div>
 
       {/* Watch & Listen Video Hub */}

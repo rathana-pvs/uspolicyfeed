@@ -503,3 +503,13 @@ a:hover .story-title, .story-title-link:hover { text-decoration: underline; }
 }
 
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* Live timeline entry animation (replaces framer-motion) */
+@keyframes live-update-in {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: none; }
+}
+.live-update-enter { animation: live-update-in 0.4s ease-out both; }
+@media (prefers-reduced-motion: reduce) {
+  .live-update-enter { animation: none; }
+}

@@ -1,7 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { useParams } from 'next/navigation'
 import { LiveUpdate } from '@/types'
 import { formatDate } from '@/lib/utils'
 import { dict } from '@/lib/i18n'
@@ -15,13 +13,11 @@ export function LiveTimeline({ updates }: LiveTimelineProps) {
   return (
     <div className="flex flex-col gap-0">
       {updates.map((update, i) => (
-        <motion.div
+        <div
           key={update.id}
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.05, type: 'spring', stiffness: 120 }}
-          className="flex gap-4 py-5"
+          className="live-update-enter flex gap-4 py-5"
           style={{
+            animationDelay: `${i * 50}ms`,
             borderLeft: `3px solid ${update.isBreaking ? 'var(--accent-red-bright)' : i === 0 ? 'var(--accent-gold)' : 'var(--border)'}`,
             paddingLeft: '1.25rem',
             borderBottom: '1px solid var(--border-subtle)',
@@ -64,7 +60,7 @@ export function LiveTimeline({ updates }: LiveTimelineProps) {
               {update.body}
             </p>
           </div>
-        </motion.div>
+        </div>
       ))}
     </div>
   )

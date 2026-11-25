@@ -22,6 +22,20 @@ function normalizeImageUrl(url: string | undefined | null): string | undefined {
   return url.startsWith('/') ? url : `/${url}`
 }
 
+/**
+ * List queries (homepage, category, sidebars) never render the article body or the
+ * SEO/OG groups, and only need a few media/author fields. Leaving them out keeps the
+ * cached data and the page payload small: the full body of 40 articles used to ship
+ * to the browser on the homepage (~1 MB).
+ * Only getArticle() (the article page) loads the full document.
+ */
+const LIST_SELECT = { content: false, meta: false, og: false } as const
+const LIST_POPULATE = {
+  media: { url: true, filename: true, alt: true, externalUrl: true, width: true, height: true },
+  authors: { name: true, slug: true, avatar: true },
+} as const
+const listQuery = { select: LIST_SELECT, populate: LIST_POPULATE } as any
+
 // Detect build time to bypass caching placeholder database responses
 const isBuildTime = 
   !process.env.DATABASE_URI || 
@@ -47,6 +61,7 @@ const cachedGetArticles = unstable_cache(
         page: params?.page || 1,
         where: whereClause,
         depth: 2,
+        ...listQuery,
         sort: '-publishedAt',
       })
 
@@ -143,7 +158,7 @@ export async function getArticle(slug: string): Promise<Article | null> {
       }
     },
     ['article', slug],
-    { tags: ['articles', `article-${slug}`], revalidate: 60 }
+    { tags: ['articles'], revalidate: 60 }
   )()
 }
 
@@ -158,6 +173,7 @@ const cachedGetFeatured = unstable_cache(
         },
         limit: 5,
         depth: 2,
+        ...listQuery,
         sort: '-publishedAt',
       })
       const docs = result.docs as unknown as Article[]
@@ -193,6 +209,7 @@ const cachedGetBreakingArticles = unstable_cache(
         },
         limit: 5,
         depth: 2,
+        ...listQuery,
       })
       if (result.docs && result.docs.length > 0) {
         return result.docs as unknown as Article[]
@@ -232,6 +249,7 @@ export async function getRelatedArticles(articleId: string | number): Promise<Ar
           where,
           limit: 3,
           depth: 2,
+          ...listQuery,
         })
         if (result.docs && result.docs.length > 0) {
           return result.docs as unknown as Article[]
@@ -263,6 +281,7 @@ export async function getVideoArticles(limit: number = 6): Promise<Article[]> {
           },
           limit,
           depth: 2,
+          ...listQuery,
           sort: '-publishedAt',
         })
         if (result.docs && result.docs.length > 0) {
@@ -295,6 +314,7 @@ export async function getArticlesByRegion(region: string, limit: number = 6): Pr
           },
           limit,
           depth: 2,
+          ...listQuery,
           sort: '-publishedAt',
         })
         if (result.docs && result.docs.length > 0) {
